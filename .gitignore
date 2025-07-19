@@ -1,0 +1,15 @@
+.env
+temp_videos
+output_images
+*_pycache_
+ProbabilityForComputerScientists.pdf
+*.log
+*.tmp
+*.temp
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+*.egg-info/
+.vscode/

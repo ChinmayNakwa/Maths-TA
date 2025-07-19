@@ -1,0 +1,31 @@
+# Core LangChain & Google
+langchain
+langgraph
+langsmith
+langchain-google-genai
+google-genai
+
+# API Framework
+fastapi
+uvicorn[standard] # For running the FastAPI server
+
+# Data Processing & Storage
+pymupdf           # Base library for PyMuPDF
+pdf2image
+sentence-transformers
+astrapy           # Direct driver for AstraDB
+langchain-astradb # LangChain integration for AstraDB
+Pillow            # For image processing
+
+# YouTube Processing
+youtube-transcript-api
+pytube
+opencv-python
+
+# Utilities
+python-dotenv
+
+cloudinary
+
+
+# conda install -c conda-forge poppler
