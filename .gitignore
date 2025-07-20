@@ -13,4 +13,5 @@ build/
 dist/
 *.egg-info/
 .vscode/
-/frontend
+/frontend/frontend.py
+backend\maths-ta.json

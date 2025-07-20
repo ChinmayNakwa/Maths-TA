@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     ASTRA_DB_APPLICATION_TOKEN: str = Field(..., env="ASTRA_DB_APPLICATION_TOKEN")
     ASTRA_DB_KEYSPACE: str = Field(..., env="ASTRA_DB_KEYSPACE") 
     ASTRA_DB_COLLECTION_NAME: str = Field(..., env="ASTRA_DB_COLLECTION_NAME")
+    LANGSMITH_API_KEY: str = Field(..., env="LANGSMITH_API_KEY")
+    LANGSMITH_PROJECT: str = Field("Maths-TA", env="LANGSMITH_PROJECT")
 
     CLOUDINARY_CLOUD_NAME: str = Field(..., env="CLOUDINARY_CLOUD_NAME")
     CLOUDINARY_API_KEY: str = Field(..., env="CLOUDINARY_API_KEY")

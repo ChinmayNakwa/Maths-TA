@@ -1,0 +1,32 @@
+# Bytecode and cache
+__pycache__/
+*.py[cod]
+*.so
+
+# Environment files
+.env
+*.env
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs and outputs
+*.log
+output_images/
+temp_videos/
+
+# Git and version control
+.git/
+.gitignore
+
+# Python virtual environments
+.venv/
+env/
+venv/
+
+# PDF or large local files
+*.pdf
+
+# Render or local metadata
+render.yaml

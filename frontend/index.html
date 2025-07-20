@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS109 TA Bot</title>
+    <style>
+        /* CSS Variables for a consistent Dark Theme */
+        :root {
+            --bg-color: #1a1a2e;
+            --surface-color: #16213e;
+            --primary-color: #0f3460;
+            --secondary-color: #e94560;
+            --text-color: #dcdcdc;
+            --subtle-text-color: #a0a0a0;
+            --user-bubble-bg: #0f3460;
+            --ta-bubble-bg: #2a2a4a;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* General Body and Layout Styling */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chat-container {
+            width: 100%;
+            max-width: 800px;
+            height: 95vh;
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chat Header */
+        header {
+            background-color: var(--primary-color);
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            /* Added for positioning context */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* NEW: Session ID Input Styling */
+        #session-container {
+            position: absolute;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #session-container label {
+            font-size: 0.8em;
+            margin-right: 8px;
+            font-weight: normal;
+            color: var(--subtle-text-color);
+        }
+
+        #session-id-input {
+            background-color: var(--surface-color);
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            padding: 4px 8px;
+            width: 160px;
+            font-size: 0.8em;
+        }
+        #session-id-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+
+        /* Main Chat Window */
+        #chat-window {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Custom Scrollbar */
+        #chat-window::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-window::-webkit-scrollbar-track {
+            background: var(--surface-color);
+        }
+
+        #chat-window::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        /* Message Bubble Styling */
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: var(--user-bubble-bg);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ta-message {
+            background-color: var(--ta-bubble-bg);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ta-message strong {
+            color: var(--secondary-color);
+        }
+
+        /* TA Thinking Animation */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+        }
+        .typing-indicator span {
+            height: 10px;
+            width: 10px;
+            margin: 0 2px;
+            background-color: var(--subtle-text-color);
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+
+        /* Sources Section Styling */
+        .sources-container {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--primary-color);
+        }
+        .source-button {
+            background: none;
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 0.8em;
+            transition: all 0.2s ease;
+        }
+        .source-button:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        /* Chat Input Form */
+        #chat-input-form {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--primary-color);
+        }
+
+        #user-input {
+            flex-grow: 1;
+            background-color: var(--bg-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 10px 15px;
+            color: var(--text-color);
+            font-size: 1em;
+            resize: none;
+        }
+        #user-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0 15px;
+            transition: color 0.2s ease;
+        }
+        .icon-button:hover {
+            color: var(--secondary-color);
+        }
+
+        #image-upload-input {
+            display: none;
+        }
+
+        /* Image Modal Styling */
+        #image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+        }
+        #modal-content {
+            max-width: 80vw;
+            max-height: 80vh;
+        }
+        #modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="chat-container">
+        <header>
+            <div id="session-container">
+                <label for="session-id-input">Session ID:</label>
+                <input type="text" id="session-id-input" placeholder="Enter ID to begin...">
+            </div>
+            CS109 Teaching Assistant
+        </header>
+        <div id="chat-window">
+            <!-- Messages will be dynamically added here -->
+            <div class="message ta-message">
+                Hello! Please enter a Session ID in the top-left corner to start our conversation. How can I help you with CS109 today?
+            </div>
+        </div>
+        <form id="chat-input-form">
+            <label for="image-upload-input" class="icon-button" title="Upload Image">📎</label>
+            <input type="file" id="image-upload-input" accept="image/*">
+            <textarea id="user-input" placeholder="Type your question..." rows="1"></textarea>
+            <button type="submit" class="icon-button" title="Send">➤</button>
+        </form>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal">
+        <span id="modal-close">×</span>
+        <img id="modal-content">
+    </div>
+
+    <script>
+        // DOM Element References
+        const chatWindow = document.getElementById('chat-window');
+        const chatForm = document.getElementById('chat-input-form');
+        const userInput = document.getElementById('user-input');
+        const imageUploadInput = document.getElementById('image-upload-input');
+        const imageModal = document.getElementById('image-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalClose = document.getElementById('modal-close');
+        // NEW: Get reference to the session ID input
+        const sessionIdInput = document.getElementById('session-id-input');
+
+        // --- Event Listeners ---
+        
+        // Handle form submission
+        chatForm.addEventListener('submit', handleFormSubmit);
+
+        // Allow pressing Enter to submit, Shift+Enter for new line
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatForm.dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        // Handle closing the image modal
+        modalClose.onclick = () => imageModal.style.display = "none";
+        imageModal.onclick = (e) => {
+            if(e.target === imageModal) {
+                 imageModal.style.display = "none";
+            }
+        }
+        
+        // NEW: Load session ID from sessionStorage on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSessionId = sessionStorage.getItem('chatSessionId');
+            if (savedSessionId) {
+                sessionIdInput.value = savedSessionId;
+            }
+        });
+
+        // NEW: Save session ID to sessionStorage whenever it changes
+        sessionIdInput.addEventListener('input', () => {
+            sessionStorage.setItem('chatSessionId', sessionIdInput.value.trim());
+        });
+
+        // --- Core Functions ---
+
+        /**
+         * Main function to handle form submission, sending data to the backend.
+         */
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const query = userInput.value.trim();
+            const imageFile = imageUploadInput.files[0];
+            // MODIFIED: Get session ID from input field
+            const sessionId = sessionIdInput.value.trim();
+
+            // NEW: Check if session ID is provided
+            if (!sessionId) {
+                alert('Please enter a Session ID in the top-left corner to begin.');
+                sessionIdInput.focus();
+                return;
+            }
+
+            if (!query && !imageFile) return;
+
+            // Display user's message in the chat
+            addMessageToChat(query, 'user');
+            
+            // Reset form
+            userInput.value = '';
+            imageUploadInput.value = ''; // Clear file input
+            userInput.style.height = 'auto';
+
+
+            // Show a "thinking" indicator
+            const thinkingMessage = addMessageToChat('', 'ta', true);
+
+            try {
+                // Convert image to base64 if it exists
+                const imageData = imageFile ? await toBase64(imageFile) : null;
+                
+                // Prepare API request payload
+                const payload = {
+                    query: query,
+                    // MODIFIED: Use the ID from the input field
+                    session_id: sessionId,
+                    image_data: imageData
+                };
+
+                // Make the API call
+                const response = await fetch('http://127.0.0.1:8000/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                // Remove the "thinking" indicator
+                thinkingMessage.remove();
+                
+                if (!response.ok) {
+                    // Handle HTTP errors like 429, 500 etc.
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                // Display TA's response
+                addTaResponseToChat(data);
+
+            } catch (error) {
+                console.error('Error:', error);
+                thinkingMessage.remove();
+                addMessageToChat(`Sorry, I encountered an error. Please try again.\n\n*Details: ${error.message}*`, 'ta');
+            }
+        }
+
+        /**
+         * Adds a simple user message or a TA thinking/error message to the chat window.
+         * @param {string} text - The message content.
+         * @param {string} sender - 'user' or 'ta'.
+         * @param {boolean} isTyping - If true, displays a typing indicator.
+         * @returns {HTMLElement} The created message element.
+         */
+        function addMessageToChat(text, sender, isTyping = false) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${sender}-message`);
+            
+            if (isTyping) {
+                messageElement.innerHTML = `
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                `;
+            } else {
+                // Basic markdown parsing for bold text
+                let formattedText = text.replace(/\n/g, '<br>');
+                formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                messageElement.innerHTML = formattedText;
+            }
+
+            chatWindow.appendChild(messageElement);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
+            return messageElement;
+        }
+
+        /**
+         * Adds a rich TA response, including sources, to the chat.
+         * @param {object} data - The response object from the backend.
+         */
+        function addTaResponseToChat(data) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'ta-message');
+            
+            // Format the main answer
+            let formattedAnswer = data.answer.replace(/\n/g, '<br>');
+            formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            let messageHTML = `<div>${formattedAnswer}</div>`;
+
+            // Add sources if they exist
+            if (data.sources && data.sources.length > 0) {
+                const sourcesHTML = data.sources.map(source => 
+                    `<button class="source-button" data-url="${source.url}">${source.location}</button>`
+                ).join('');
+                
+                messageHTML += `<div class="sources-container">${sourcesHTML}</div>`;
+            }
+
+            messageElement.innerHTML = messageHTML;
+            chatWindow.appendChild(messageElement);
+
+            // Add click listeners to the new source buttons
+            messageElement.querySelectorAll('.source-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    modalContent.src = button.dataset.url;
+                    imageModal.style.display = "flex";
+                });
+            });
+
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        /**
+         * Utility function to convert a File object to a base64 string.
+         * @param {File} file - The file to convert.
+         * @returns {Promise<string>} A promise that resolves with the base64 string.
+         */
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+    </script>
+</body>
+</html>

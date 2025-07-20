@@ -6,6 +6,7 @@ class AskRequest(BaseModel):
     Defines the structure for a user's question.
     """
     query: str
+    session_id: str
     image_data: Optional[str] = Field(None, description="Base64-encoded image data") 
 
 class SourceDocument(BaseModel):
