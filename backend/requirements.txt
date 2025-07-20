@@ -27,5 +27,8 @@ python-dotenv
 
 cloudinary
 
+streamlit
+
+langgraph-cli[inmem]
 
 # conda install -c conda-forge poppler
