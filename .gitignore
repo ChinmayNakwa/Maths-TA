@@ -15,3 +15,5 @@ dist/
 .vscode/
 /frontend/frontend.py
 backend\maths-ta.json
+backend/.langgraph_api/
+.langgraph_api/

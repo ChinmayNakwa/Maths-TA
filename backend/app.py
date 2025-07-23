@@ -50,7 +50,7 @@ async def ask_question(request: AskRequest):
         raise HTTPException(status_code=400, detail="session_id cannot be empty.")
 
     config = {"configurable": {"thread_id": request.session_id}}
-    inputs = {"query": request.query, "image_data": request.image_data, "chat_history": []}
+    inputs = {"query": request.query, "image_data": request.image_data}
 
     try:
         # Use ainvoke for async compatibility with FastAPI

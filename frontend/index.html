@@ -289,7 +289,6 @@
         const imageModal = document.getElementById('image-modal');
         const modalContent = document.getElementById('modal-content');
         const modalClose = document.getElementById('modal-close');
-        // NEW: Get reference to the session ID input
         const sessionIdInput = document.getElementById('session-id-input');
 
         // --- Event Listeners ---
@@ -313,7 +312,7 @@
             }
         }
         
-        // NEW: Load session ID from sessionStorage on page load
+        // Load session ID from sessionStorage on page load
         window.addEventListener('DOMContentLoaded', () => {
             const savedSessionId = sessionStorage.getItem('chatSessionId');
             if (savedSessionId) {
@@ -321,7 +320,7 @@
             }
         });
 
-        // NEW: Save session ID to sessionStorage whenever it changes
+        // Save session ID to sessionStorage whenever it changes
         sessionIdInput.addEventListener('input', () => {
             sessionStorage.setItem('chatSessionId', sessionIdInput.value.trim());
         });
@@ -335,10 +334,8 @@
             event.preventDefault();
             const query = userInput.value.trim();
             const imageFile = imageUploadInput.files[0];
-            // MODIFIED: Get session ID from input field
             const sessionId = sessionIdInput.value.trim();
 
-            // NEW: Check if session ID is provided
             if (!sessionId) {
                 alert('Please enter a Session ID in the top-left corner to begin.');
                 sessionIdInput.focus();
@@ -347,48 +344,37 @@
 
             if (!query && !imageFile) return;
 
-            // Display user's message in the chat
             addMessageToChat(query, 'user');
             
-            // Reset form
             userInput.value = '';
-            imageUploadInput.value = ''; // Clear file input
+            imageUploadInput.value = ''; 
             userInput.style.height = 'auto';
 
-
-            // Show a "thinking" indicator
             const thinkingMessage = addMessageToChat('', 'ta', true);
 
             try {
-                // Convert image to base64 if it exists
                 const imageData = imageFile ? await toBase64(imageFile) : null;
                 
-                // Prepare API request payload
                 const payload = {
                     query: query,
-                    // MODIFIED: Use the ID from the input field
                     session_id: sessionId,
                     image_data: imageData
                 };
 
-                // Make the API call
                 const response = await fetch('http://127.0.0.1:8000/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 
-                // Remove the "thinking" indicator
                 thinkingMessage.remove();
                 
                 if (!response.ok) {
-                    // Handle HTTP errors like 429, 500 etc.
                     throw new Error(`API Error: ${response.status} ${response.statusText}`);
                 }
 
                 const data = await response.json();
                 
-                // Display TA's response
                 addTaResponseToChat(data);
 
             } catch (error) {
@@ -400,10 +386,6 @@
 
         /**
          * Adds a simple user message or a TA thinking/error message to the chat window.
-         * @param {string} text - The message content.
-         * @param {string} sender - 'user' or 'ta'.
-         * @param {boolean} isTyping - If true, displays a typing indicator.
-         * @returns {HTMLElement} The created message element.
          */
         function addMessageToChat(text, sender, isTyping = false) {
             const messageElement = document.createElement('div');
@@ -416,32 +398,28 @@
                     </div>
                 `;
             } else {
-                // Basic markdown parsing for bold text
                 let formattedText = text.replace(/\n/g, '<br>');
                 formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 messageElement.innerHTML = formattedText;
             }
 
             chatWindow.appendChild(messageElement);
-            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight;
             return messageElement;
         }
 
         /**
          * Adds a rich TA response, including sources, to the chat.
-         * @param {object} data - The response object from the backend.
          */
         function addTaResponseToChat(data) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', 'ta-message');
             
-            // Format the main answer
             let formattedAnswer = data.answer.replace(/\n/g, '<br>');
             formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
             let messageHTML = `<div>${formattedAnswer}</div>`;
 
-            // Add sources if they exist
             if (data.sources && data.sources.length > 0) {
                 const sourcesHTML = data.sources.map(source => 
                     `<button class="source-button" data-url="${source.url}">${source.location}</button>`
@@ -453,7 +431,6 @@
             messageElement.innerHTML = messageHTML;
             chatWindow.appendChild(messageElement);
 
-            // Add click listeners to the new source buttons
             messageElement.querySelectorAll('.source-button').forEach(button => {
                 button.addEventListener('click', () => {
                     modalContent.src = button.dataset.url;
@@ -473,7 +450,13 @@
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
+                // *** THIS IS THE FIX ***
+                // The result includes a data URL prefix that we need to remove.
+                // e.g., "data:image/jpeg;base64,LzlqLzRBQ... -> "LzlqLzRBQ..."
+                reader.onload = () => {
+                    const base64String = reader.result.split(',')[1];
+                    resolve(base64String);
+                };
                 reader.onerror = error => reject(error);
             });
         }
