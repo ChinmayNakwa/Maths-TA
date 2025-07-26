@@ -2,7 +2,6 @@
 
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
 [![Framework](https://img.shields.io/badge/Framework-LangGraph-blueviolet)](https://langchain.com)
-[![Deployment](https://img.shields.io/badge/Deploy-Render-46E3B7?logo=render)](https://render.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An advanced, multi-modal AI-powered teaching assistant for the Probability. This agent provides a conversational interface to answer questions, explain concepts from the course textbook and video lectures, and offer Socratic-style guidance on user-submitted problems.
