@@ -24,7 +24,6 @@ An advanced, multi-modal AI-powered teaching assistant for the Probability. This
 -   **Data Ingestion:** Custom Python scripts using `PyMuPDF`, `OpenCV`, and `yt-dlp` to process the knowledge sources.
 
 ---
-<img width="1016" height="1063" alt="Screenshot 2025-07-24 003015" src="https://github.com/user-attachments/assets/a68c5478-f07c-40d0-b917-b2c7a74bf736" />
 
 <img width="1141" height="705" alt="flow" src="https://github.com/user-attachments/assets/ef90fc40-d290-4ff4-9a68-9b67d89a3624" />
 
