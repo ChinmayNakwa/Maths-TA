@@ -42,7 +42,7 @@ Follow these steps to set up and run the Maths AI Tutor on your local machine.
 
 ### 2. Environment Setup
 
-This project uses `conda` to m[Unit I.pptx](https://github.com/user-attachments/files/21442390/Unit.I.pptx)anage its complex dependencies.
+This project uses `conda` to manage its complex dependencies.
 
 ```bash
 # Clone the repository
