@@ -1,465 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS109 TA Bot</title>
+    <title>Maths AI Tutor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* CSS Variables for a consistent Dark Theme */
-        :root {
-            --bg-color: #1a1a2e;
-            --surface-color: #16213e;
-            --primary-color: #0f3460;
-            --secondary-color: #e94560;
-            --text-color: #dcdcdc;
-            --subtle-text-color: #a0a0a0;
-            --user-bubble-bg: #0f3460;
-            --ta-bubble-bg: #2a2a4a;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* General Body and Layout Styling */
-        body {
-            margin: 0;
-            font-family: var(--font-family);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        #chat-container {
-            width: 100%;
-            max-width: 800px;
-            height: 95vh;
-            background-color: var(--surface-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Chat Header */
-        header {
-            background-color: var(--primary-color);
-            padding: 15px 20px;
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 10;
-            /* Added for positioning context */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        /* NEW: Session ID Input Styling */
-        #session-container {
-            position: absolute;
-            left: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        #session-container label {
-            font-size: 0.8em;
-            margin-right: 8px;
-            font-weight: normal;
-            color: var(--subtle-text-color);
-        }
-
-        #session-id-input {
-            background-color: var(--surface-color);
-            border: 1px solid var(--primary-color);
-            color: var(--text-color);
-            border-radius: 5px;
-            padding: 4px 8px;
-            width: 160px;
-            font-size: 0.8em;
-        }
-        #session-id-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-
-        /* Main Chat Window */
-        #chat-window {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Custom Scrollbar */
-        #chat-window::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #chat-window::-webkit-scrollbar-track {
-            background: var(--surface-color);
-        }
-
-        #chat-window::-webkit-scrollbar-thumb {
-            background-color: var(--primary-color);
-            border-radius: 10px;
-        }
-
-        /* Message Bubble Styling */
-        .message {
-            max-width: 75%;
-            padding: 12px 18px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            word-wrap: break-word;
-        }
-
-        .user-message {
-            background-color: var(--user-bubble-bg);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .ta-message {
-            background-color: var(--ta-bubble-bg);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-        
-        .ta-message strong {
-            color: var(--secondary-color);
-        }
-
-        /* TA Thinking Animation */
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-        }
-        .typing-indicator span {
-            height: 10px;
-            width: 10px;
-            margin: 0 2px;
-            background-color: var(--subtle-text-color);
-            border-radius: 50%;
-            display: inline-block;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1.0); }
-        }
-
-
-        /* Sources Section Styling */
-        .sources-container {
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid var(--primary-color);
-        }
-        .source-button {
-            background: none;
-            border: 1px solid var(--secondary-color);
-            color: var(--secondary-color);
-            padding: 5px 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            font-size: 0.8em;
-            transition: all 0.2s ease;
-        }
-        .source-button:hover {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-
-        /* Chat Input Form */
-        #chat-input-form {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid var(--primary-color);
-        }
-
-        #user-input {
-            flex-grow: 1;
-            background-color: var(--bg-color);
-            border: 1px solid var(--primary-color);
-            border-radius: 20px;
-            padding: 10px 15px;
-            color: var(--text-color);
-            font-size: 1em;
-            resize: none;
-        }
-        #user-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-        .icon-button {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 0 15px;
-            transition: color 0.2s ease;
-        }
-        .icon-button:hover {
-            color: var(--secondary-color);
-        }
-
-        #image-upload-input {
-            display: none;
-        }
-
-        /* Image Modal Styling */
-        #image-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            justify-content: center;
-            align-items: center;
-        }
-        #modal-content {
-            max-width: 80vw;
-            max-height: 80vh;
-        }
-        #modal-close {
-            position: absolute;
-            top: 20px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
+        :root { --bg-color: #1a1a2e; --surface-color: #16213e; --primary-color: #0f3460; --secondary-color: #e94560; --text-color: #dcdcdc; --subtle-text-color: #a0a0a0; --user-bubble-bg: #0f3460; --ta-bubble-bg: #2a2a4a; --font-family: 'Segoe UI', sans-serif; }
+        body { margin: 0; font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #chat-container { width: 100%; max-width: 800px; height: 95vh; background-color: var(--surface-color); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; }
+        header { background-color: var(--primary-color); padding: 15px 20px; text-align: center; font-size: 1.2em; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 10; display: flex; justify-content: center; align-items: center; position: relative; }
+        #session-container { position: absolute; left: 20px; display: flex; align-items: center; }
+        #session-container label { font-size: 0.8em; margin-right: 8px; font-weight: normal; color: var(--subtle-text-color); }
+        #session-id-input { background-color: var(--surface-color); border: 1px solid var(--primary-color); color: var(--text-color); border-radius: 5px; padding: 4px 8px; width: 160px; font-size: 0.8em; }
+        #session-id-input:focus { outline: none; border-color: var(--secondary-color); }
+        #chat-window { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        .message { display: flex; align-items: flex-start; max-width: 80%; padding: 12px 18px; border-radius: 18px; margin-bottom: 15px; line-height: 1.5; word-wrap: break-word; }
+        .user-message { background-color: var(--user-bubble-bg); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .ta-message { background-color: var(--ta-bubble-bg); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .message-content { flex-grow: 1; }
+        .action-button { background: none; border: none; color: var(--subtle-text-color); cursor: pointer; padding: 0 0 0 10px; font-size: 1.1em; transition: color 0.2s ease; }
+        .action-button:hover { color: var(--secondary-color); }
+        .typing-indicator { display: flex; align-items: center; }
+        .typing-indicator span { height: 10px; width: 10px; margin: 0 2px; background-color: var(--subtle-text-color); border-radius: 50%; display: inline-block; animation: bounce 1.4s infinite ease-in-out both; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; } .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+        .sources-container { margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--primary-color); }
+        .source-button { background: none; border: 1px solid var(--secondary-color); color: var(--secondary-color); padding: 5px 10px; border-radius: 15px; cursor: pointer; margin-right: 8px; margin-bottom: 8px; font-size: 0.8em; transition: all 0.2s ease; }
+        .source-button:hover { background-color: var(--secondary-color); color: white; }
+        #chat-input-form { display: flex; padding: 15px; border-top: 1px solid var(--primary-color); }
+        #user-input { flex-grow: 1; background-color: var(--bg-color); border: 1px solid var(--primary-color); border-radius: 20px; padding: 10px 15px; color: var(--text-color); font-size: 1em; resize: none; }
+        #user-input:focus { outline: none; border-color: var(--secondary-color); }
+        .icon-button { background: none; border: none; color: var(--text-color); font-size: 1.5em; cursor: pointer; padding: 0 15px; transition: color 0.2s ease; }
+        .icon-button:hover { color: var(--secondary-color); }
+        #image-upload-input { display: none; }
+        #mic-button.recording i { color: var(--secondary-color); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        #image-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
+        #modal-content { max-width: 80vw; max-height: 80vh; }
+        #modal-close { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
     <div id="chat-container">
         <header>
-            <div id="session-container">
-                <label for="session-id-input">Session ID:</label>
-                <input type="text" id="session-id-input" placeholder="Enter ID to begin...">
-            </div>
+            <div id="session-container"><label for="session-id-input">Session ID:</label><input type="text" id="session-id-input"></div>
             CS109 Teaching Assistant
         </header>
         <div id="chat-window">
-            <!-- Messages will be dynamically added here -->
-            <div class="message ta-message">
-                Hello! Please enter a Session ID in the top-left corner to start our conversation. How can I help you with CS109 today?
-            </div>
+            <div class="message ta-message"><div class="message-content">Hello! I'm your AI assistant for CS109. How can I help?</div></div>
         </div>
         <form id="chat-input-form">
             <label for="image-upload-input" class="icon-button" title="Upload Image">📎</label>
             <input type="file" id="image-upload-input" accept="image/*">
-            <textarea id="user-input" placeholder="Type your question..." rows="1"></textarea>
+            <textarea id="user-input" placeholder="Type your question or use the mic..." rows="1"></textarea>
+            <button type="button" id="mic-button" class="icon-button" title="Record Voice"><i class="bi bi-mic-fill"></i></button>
             <button type="submit" class="icon-button" title="Send">➤</button>
         </form>
     </div>
-
-    <!-- Image Modal -->
-    <div id="image-modal">
-        <span id="modal-close">×</span>
-        <img id="modal-content">
-    </div>
+    <div id="image-modal"><span id="modal-close">×</span><img id="modal-content" alt="Source Image"></div>
 
     <script>
-        // DOM Element References
-        const chatWindow = document.getElementById('chat-window');
-        const chatForm = document.getElementById('chat-input-form');
-        const userInput = document.getElementById('user-input');
-        const imageUploadInput = document.getElementById('image-upload-input');
-        const imageModal = document.getElementById('image-modal');
-        const modalContent = document.getElementById('modal-content');
-        const modalClose = document.getElementById('modal-close');
-        const sessionIdInput = document.getElementById('session-id-input');
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_BASE_URL = 'http://127.0.0.1:8000';
+            const chatWindow = document.getElementById('chat-window');
+            const chatForm = document.getElementById('chat-input-form');
+            const userInput = document.getElementById('user-input');
+            const imageUploadInput = document.getElementById('image-upload-input');
+            const micButton = document.getElementById('mic-button');
+            const imageModal = document.getElementById('image-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalClose = document.getElementById('modal-close');
+            const sessionIdInput = document.getElementById('session-id-input');
 
-        // --- Event Listeners ---
-        
-        // Handle form submission
-        chatForm.addEventListener('submit', handleFormSubmit);
+            let currentSessionId = getOrSetSessionId();
+            sessionIdInput.addEventListener('input', () => { const newId = sessionIdInput.value.trim(); if (newId) { sessionStorage.setItem('chatSessionId', newId); currentSessionId = newId; } });
+            chatForm.addEventListener('submit', handleFormSubmit);
+            userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); chatForm.dispatchEvent(new Event('submit')); } });
+            modalClose.onclick = () => imageModal.style.display = "none";
+            imageModal.onclick = (e) => { if (e.target === imageModal) imageModal.style.display = "none"; };
 
-        // Allow pressing Enter to submit, Shift+Enter for new line
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                chatForm.dispatchEvent(new Event('submit'));
-            }
-        });
-        
-        // Handle closing the image modal
-        modalClose.onclick = () => imageModal.style.display = "none";
-        imageModal.onclick = (e) => {
-            if(e.target === imageModal) {
-                 imageModal.style.display = "none";
-            }
-        }
-        
-        // Load session ID from sessionStorage on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedSessionId = sessionStorage.getItem('chatSessionId');
-            if (savedSessionId) {
-                sessionIdInput.value = savedSessionId;
-            }
-        });
+            let mediaRecorder, audioChunks = [], isRecording = false;
+            micButton.addEventListener('click', () => isRecording ? stopRecording() : startRecording());
 
-        // Save session ID to sessionStorage whenever it changes
-        sessionIdInput.addEventListener('input', () => {
-            sessionStorage.setItem('chatSessionId', sessionIdInput.value.trim());
-        });
-
-        // --- Core Functions ---
-
-        /**
-         * Main function to handle form submission, sending data to the backend.
-         */
-        async function handleFormSubmit(event) {
-            event.preventDefault();
-            const query = userInput.value.trim();
-            const imageFile = imageUploadInput.files[0];
-            const sessionId = sessionIdInput.value.trim();
-
-            if (!sessionId) {
-                alert('Please enter a Session ID in the top-left corner to begin.');
-                sessionIdInput.focus();
-                return;
+            async function startRecording() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+                    isRecording = true;
+                    micButton.classList.add('recording');
+                    micButton.innerHTML = '<i class="bi bi-stop-circle-fill"></i>';
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        sendAudioForTranscription(audioBlob);
+                        audioChunks = [];
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+                } catch (error) { console.error("Mic error:", error); alert("Could not access microphone."); }
             }
 
-            if (!query && !imageFile) return;
-
-            addMessageToChat(query, 'user');
+            function stopRecording() {
+                if (mediaRecorder) mediaRecorder.stop();
+                isRecording = false;
+                micButton.classList.remove('recording');
+                micButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            }
             
-            userInput.value = '';
-            imageUploadInput.value = ''; 
-            userInput.style.height = 'auto';
+            async function sendAudioForTranscription(audioBlob) {
+                const formData = new FormData();
+                formData.append("audio_file", audioBlob, "user_recording.webm");
+                userInput.placeholder = "Transcribing voice...";
+                try {
+                    const response = await fetch(`${API_BASE_URL}/transcribe`, { method: 'POST', body: formData });
+                    if (!response.ok) { const errData = await response.json(); throw new Error(errData.detail || "Transcription failed"); }
+                    const data = await response.json();
+                    userInput.value = data.transcription;
+                    userInput.focus();
+                } catch (error) { console.error("Transcription Error:", error); alert(`Transcription failed: ${error.message}`); }
+                finally { userInput.placeholder = "Type your question or use the mic..."; }
+            }
+            
+            async function handleFormSubmit(event) {
+                event.preventDefault();
+                const query = userInput.value.trim();
+                const imageFile = imageUploadInput.files[0];
+                const sessionId = sessionIdInput.value.trim();
+                if (!sessionId) { alert('Please provide a Session ID.'); sessionIdInput.focus(); return; }
+                if (!query && !imageFile) return;
+                addMessageToChat(query || "Image submitted", 'user');
+                userInput.value = ''; imageUploadInput.value = '';
+                const thinkingMessage = addMessageToChat('', 'ta', true);
+                try {
+                    const imageData = imageFile ? await toBase64(imageFile) : null;
+                    const payload = { query, session_id: sessionId, image_data: imageData };
+                    const response = await fetch(`${API_BASE_URL}/ask`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    thinkingMessage.remove();
+                    if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.detail || `API Error: ${response.status}`); }
+                    const data = await response.json();
+                    addTaResponseToChat(data);
+                } catch (error) { console.error('Error:', error); thinkingMessage.remove(); addMessageToChat(`Sorry, an error occurred. Details: ${error.message}`, 'ta'); }
+            }
 
-            const thinkingMessage = addMessageToChat('', 'ta', true);
-
-            try {
-                const imageData = imageFile ? await toBase64(imageFile) : null;
-                
-                const payload = {
-                    query: query,
-                    session_id: sessionId,
-                    image_data: imageData
-                };
-
-                const response = await fetch('http://127.0.0.1:8000/ask', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                thinkingMessage.remove();
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            function addMessageToChat(text, sender, isTyping = false) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', `${sender}-message`);
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('message-content');
+                if (isTyping) {
+                    contentDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+                } else {
+                    contentDiv.innerHTML = marked.parse(text);
+                    MathJax.typesetPromise([contentDiv]).catch(err => console.error('MathJax error:', err));
                 }
+                messageElement.appendChild(contentDiv);
+                chatWindow.appendChild(messageElement);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+                return messageElement;
+            }
 
-                const data = await response.json();
+            function addTaResponseToChat(data) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'ta-message');
                 
-                addTaResponseToChat(data);
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('message-content');
+                contentDiv.innerHTML = marked.parse(data.answer);
+                messageElement.appendChild(contentDiv);
 
-            } catch (error) {
-                console.error('Error:', error);
-                thinkingMessage.remove();
-                addMessageToChat(`Sorry, I encountered an error. Please try again.\n\n*Details: ${error.message}*`, 'ta');
-            }
-        }
+                const speakerButton = document.createElement('button');
+                speakerButton.classList.add('action-button');
+                speakerButton.title = "Read aloud";
+                speakerButton.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
+                speakerButton.onclick = () => playAudio(data.answer);
+                messageElement.appendChild(speakerButton);
 
-        /**
-         * Adds a simple user message or a TA thinking/error message to the chat window.
-         */
-        function addMessageToChat(text, sender, isTyping = false) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', `${sender}-message`);
-            
-            if (isTyping) {
-                messageElement.innerHTML = `
-                    <div class="typing-indicator">
-                        <span></span><span></span><span></span>
-                    </div>
-                `;
-            } else {
-                let formattedText = text.replace(/\n/g, '<br>');
-                formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                messageElement.innerHTML = formattedText;
-            }
-
-            chatWindow.appendChild(messageElement);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-            return messageElement;
-        }
-
-        /**
-         * Adds a rich TA response, including sources, to the chat.
-         */
-        function addTaResponseToChat(data) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'ta-message');
-            
-            let formattedAnswer = data.answer.replace(/\n/g, '<br>');
-            formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            let messageHTML = `<div>${formattedAnswer}</div>`;
-
-            if (data.sources && data.sources.length > 0) {
-                const sourcesHTML = data.sources.map(source => 
-                    `<button class="source-button" data-url="${source.url}">${source.location}</button>`
-                ).join('');
+                if (data.sources && data.sources.length > 0) {
+                    const sourcesHTML = data.sources.map(source => `<button class="source-button" data-url="${source.url}" title="View Source">${source.location}</button>`).join('');
+                    contentDiv.innerHTML += `<div class="sources-container">${sourcesHTML}</div>`;
+                }
                 
-                messageHTML += `<div class="sources-container">${sourcesHTML}</div>`;
-            }
-
-            messageElement.innerHTML = messageHTML;
-            chatWindow.appendChild(messageElement);
-
-            messageElement.querySelectorAll('.source-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    modalContent.src = button.dataset.url;
-                    imageModal.style.display = "flex";
+                chatWindow.appendChild(messageElement);
+                messageElement.querySelectorAll('.source-button').forEach(button => {
+                    button.addEventListener('click', () => { const url = button.dataset.url; if (url && url !== 'null') { modalContent.src = url; imageModal.style.display = "flex"; } else { alert('No visual source available for this item.'); } });
                 });
-            });
 
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
+                MathJax.typesetPromise([messageElement]).catch(err => console.error('MathJax error:', err));
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+            
+            async function playAudio(text) {
+                try {
+                    const formData = new FormData();
+                    formData.append('text', text);
+                    const response = await fetch(`${API_BASE_URL}/speak`, { method: 'POST', body: formData });
+                    if (!response.ok) { const errData = await response.json(); throw new Error(errData.detail || "TTS request failed"); }
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    audio.play();
+                } catch (error) { console.error("Error playing audio:", error); alert(`Could not play audio: ${error.message}`); }
+            }
 
-        /**
-         * Utility function to convert a File object to a base64 string.
-         * @param {File} file - The file to convert.
-         * @returns {Promise<string>} A promise that resolves with the base64 string.
-         */
-        function toBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                // *** THIS IS THE FIX ***
-                // The result includes a data URL prefix that we need to remove.
-                // e.g., "data:image/jpeg;base64,LzlqLzRBQ... -> "LzlqLzRBQ..."
-                reader.onload = () => {
-                    const base64String = reader.result.split(',')[1];
-                    resolve(base64String);
-                };
-                reader.onerror = error => reject(error);
-            });
-        }
+            function toBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = error => reject(error);
+                });
+            }
+            
+            function getOrSetSessionId() {
+                let sessionId = sessionStorage.getItem('chatSessionId');
+                if (!sessionId) { sessionId = `session-${crypto.randomUUID()}`; sessionStorage.setItem('chatSessionId', sessionId); }
+                sessionIdInput.value = sessionId; return sessionId;
+            }
+        });
     </script>
 </body>
 </html>

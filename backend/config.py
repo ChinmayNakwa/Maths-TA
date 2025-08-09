@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     YOUTUBE_PLAYLIST_URL: str = "https://www.youtube.com/playlist?list=PLoROMvodv4rOpr_A7B9SriE_iZmkanvUg"
     #Field(..., env="CS_109_PLAYLIST_URL") 
     IMAGE_OUTPUT_DIR: str = "output_images"
+
+    HF_TOKEN: str = Field(..., env="HF_TOKEN")
     
 
     class Config:

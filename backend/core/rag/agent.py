@@ -202,12 +202,12 @@ class TutorAgent:
         self.reflection_chain = self.reasoning_model.with_structured_output(Reflection)
         print("TutorAgent: Initialized successfully.")
 
-    def prepare_inputs(self, state: GraphState) -> dict:
-        """
-        Node: Adds the initial user query to the messages list to be persisted.
-        """
-        print("---NODE: PREPARE INPUTS---")
-        return {"messages": [HumanMessage(content=state["query"])]}
+    # def prepare_inputs(self, state: GraphState) -> dict:
+    #     """
+    #     Node: Adds the initial user query to the messages list to be persisted.
+    #     """
+    #     print("---NODE: PREPARE INPUTS---")
+    #     return {"messages": [HumanMessage(content=state["query"])]}
 
     def extract_filters(self, state: GraphState) -> dict:
         """Node: Extracts structured filters from the user's query."""
@@ -242,6 +242,7 @@ class TutorAgent:
         """
         print("---NODE: ROUTE QUESTION (CONVERSATION-AWARE)---")
         query = state["query"]
+        messages = state["messages"]
         image_data = state.get("image_data")
         # MODIFICATION: Get the full message history from the state
         messages = state.get("messages", [])
@@ -678,8 +679,9 @@ def should_end_or_regenerate(state: GraphState) -> str:
     is_final = state.get("is_final_answer", False)
     
     if is_final:
-        print("  - Decision: Answer is good. Ending.")
-        return END
+        print("  - Decision: Answer is good. Proceeding to finalize.")
+        # Return a string key that we can map to the finalize_history node
+        return "finalize"
     else:
         original_route = state.get("route")
         print(f"  - Decision: Answer is flawed. Looping back to '{original_route}' path.")
@@ -688,7 +690,6 @@ def should_end_or_regenerate(state: GraphState) -> str:
         elif original_route == "critique":
             return "generate_socratic_response"
         else:
-            # Fallback to END to prevent infinite loops on unexpected routes
             print("  - Warning: Unknown route for regeneration. Ending.")
             return END
         
@@ -746,8 +747,10 @@ workflow.add_conditional_edges(
     {
         "simple_rag": "simple_rag",
         "generate_socratic_response": "generate_socratic_response",
-        # THIS IS THE CRITICAL CHANGE: If the answer is final, go to our new history node
-        END: "finalize_history"
+        # FIX: The key returned by the function is "finalize", so we map it here.
+        "finalize": "finalize_history",
+        # We also keep the END mapping in case the edge function returns it as a fallback.
+        END: END
     }
 )
 

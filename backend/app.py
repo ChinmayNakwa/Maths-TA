@@ -3,9 +3,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
-
+from langchain_core.messages import HumanMessage
 from .core.schemas import AskRequest, AskResponse
 from .core.rag.agent import app_graph
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi.responses import StreamingResponse
+from .utils.voice_service import transcribe_audio, text_to_speech
 
 # --- Application Setup ---
 app = FastAPI(
@@ -50,22 +53,54 @@ async def ask_question(request: AskRequest):
         raise HTTPException(status_code=400, detail="session_id cannot be empty.")
 
     config = {"configurable": {"thread_id": request.session_id}}
-    inputs = {"query": request.query, "image_data": request.image_data}
+    message_content = [{"type": "text", "text": request.query}]
+    if request.image_data:
+        message_content.append(
+            {
+                "type": "image_url",
+                "image_url": f"data:image/jpeg;base64,{request.image_data}"
+            }
+        )
+    
+    inputs = {
+        "messages": [HumanMessage(content=message_content)],
+        "query": request.query,
+        "image_data": request.image_data
+    }
+
 
     try:
         # Use ainvoke for async compatibility with FastAPI
         final_state = await app_graph.ainvoke(inputs, config=config)
-        
-        # With a checkpointer, the final state of invoke is the output of the *last* node.
-        # We need to get the full state to have all the data.
-        full_conversation_state = await app_graph.aget_state(config)
+    
         
         return AskResponse(
-            answer=full_conversation_state.values.get("response", "No response generated."),
-            sources=full_conversation_state.values.get("sources", [])
+            answer=final_state.get("response", "No response generated."),
+            sources=final_state.get("sources", [])
         )
     except Exception as e:
         print(f"API Error: An error occurred in the /ask endpoint: {e}")
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"An internal error occurred: {str(e)}")
+    
+@app.post("/transcribe")
+async def handle_transcribe(audio_file: UploadFile = File(...)):
+    """
+    Receives an audio file, transcribes it, and returns the text.
+    """
+    if not audio_file:
+        raise HTTPException(status_code=400, detail="No audio file provided.")
+    
+    audio_bytes = await audio_file.read()
+    transcribed_text = transcribe_audio(audio_bytes)
+    return {"transcription": transcribed_text}
+
+@app.post("/speak")
+async def handle_speak(text: str = Form(...)):
+    """
+    Receives text, converts it to speech, and streams back the audio.
+    """
+    audio_generator = text_to_speech(text)
+    # The local model generates WAV audio
+    return StreamingResponse(audio_generator, media_type="audio/wav")
