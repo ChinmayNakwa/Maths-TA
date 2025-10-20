@@ -1,5 +1,5 @@
 from api.database.astra_db_connection import get_vector_store
-from langchain.docstore.document import Document
+from langchain_core.documents import Document
 from typing import List
 
 class RAGManager:
