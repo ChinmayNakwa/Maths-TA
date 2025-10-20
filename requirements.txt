@@ -10,15 +10,15 @@ fastapi
 uvicorn[standard] # For running the FastAPI server
 
 # Data Processing & Storage
-pymupdf           # Base library for PyMuPDF
-pdf2image
+# pymupdf           # Base library for PyMuPDF
+# pdf2image
 # sentence-transformers
 astrapy           # Direct driver for AstraDB
 langchain-astradb # LangChain integration for AstraDB
 # Pillow            # For image processing
 
 # YouTube Processing
-# youtube-transcript-api
+youtube-transcript-api
 # pytube
 # opencv-python
 
