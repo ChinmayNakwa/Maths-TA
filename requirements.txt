@@ -1,6 +1,7 @@
 # Core LangChain & Google
 langchain
 langgraph
+langchain_community
 # langsmith
 langchain-google-genai
 google-genai

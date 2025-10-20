@@ -1,17 +1,13 @@
 from langchain_astradb import AstraDBVectorStore
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from api.config import settings
-import os
-from huggingface_hub import InferenceClient
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 
 def get_vector_store() -> AstraDBVectorStore:
     """Intializes and returns an AstraDBVectorStore instance."""
 
-    embedding_model = HuggingFaceInferenceAPIEmbeddings(
-    api_key=settings.HF_TOKEN,
-    model_name="sentence-transformers/all-MiniLM-L12-v2"  
-)
+    embedding_model = HuggingFaceEmbeddings(
+        model_name=settings.EMBEDDING_MODEL
+    )
 
     vector_store = AstraDBVectorStore(
         embedding = embedding_model,

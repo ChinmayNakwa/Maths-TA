@@ -14,11 +14,11 @@ import json
 import os
 import re
 from langchain_core.messages import AIMessage, HumanMessage
-from backend.database.astra_db_connection import get_vector_store
-from backend.core.schemas import SourceDocument
-from backend.config import settings
+from api.database.astra_db_connection import get_vector_store
+from api.core.schemas import SourceDocument
+from api.config import settings
 from langchain.docstore.document import Document
-from backend.core.rag.rag_manager import RAGManager
+from api.core.rag.rag_manager import RAGManager
 
 # LangSmith Configuration
 os.environ["LANGSMITH_API_KEY"] = os.getenv("LANGSMITH_API_KEY", settings.LANGSMITH_API_KEY)

@@ -1,6 +1,6 @@
 import cloudinary
 import cloudinary.uploader
-from backend.config import settings
+from api.config import settings
 from pathlib import Path
 
 cloudinary.config(
