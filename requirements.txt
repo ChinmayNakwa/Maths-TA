@@ -18,7 +18,7 @@ langchain-astradb # LangChain integration for AstraDB
 Pillow            # For image processing
 
 # YouTube Processing
-youtube-transcript-api
+# youtube-transcript-api
 pytube
 opencv-python
 
@@ -27,8 +27,8 @@ python-dotenv
 
 cloudinary
 
-streamlit
+# streamlit
 
-langgraph-cli[inmem]
+# langgraph-cli[inmem]
 
 # conda install -c conda-forge poppler
