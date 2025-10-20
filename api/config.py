@@ -24,11 +24,11 @@ class Settings(BaseSettings):
 
     CHUNK_SIZE: int = 1000         
     CHUNK_OVERLAP: int = 150
-    PDF_PATH: str = r"C:\Users\chinm\Desktop\GitHub\Maths-TA\ProbabilityForComputerScientists.pdf"
+    # PDF_PATH: str = r"C:\Users\chinm\Desktop\GitHub\Maths-TA\ProbabilityForComputerScientists.pdf"
     #Field(..., env="PROBABILITY_FOR_COMPUTER_SCIENTIST_PATH")
-    YOUTUBE_PLAYLIST_URL: str = "https://www.youtube.com/playlist?list=PLoROMvodv4rOpr_A7B9SriE_iZmkanvUg"
+    # YOUTUBE_PLAYLIST_URL: str = "https://www.youtube.com/playlist?list=PLoROMvodv4rOpr_A7B9SriE_iZmkanvUg"
     #Field(..., env="CS_109_PLAYLIST_URL") 
-    IMAGE_OUTPUT_DIR: str = "output_images"
+    # IMAGE_OUTPUT_DIR: str = "output_images"
 
     HF_TOKEN: str = Field(..., env="HF_TOKEN")
     
