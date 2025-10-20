@@ -1,7 +1,7 @@
 # Core LangChain & Google
 langchain
 langgraph
-langsmith
+# langsmith
 langchain-google-genai
 google-genai
 
@@ -19,8 +19,8 @@ Pillow            # For image processing
 
 # YouTube Processing
 # youtube-transcript-api
-pytube
-opencv-python
+# pytube
+# opencv-python
 
 # Utilities
 python-dotenv
