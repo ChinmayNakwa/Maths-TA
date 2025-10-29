@@ -2,15 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/app.py",
+      "src": "requirements.txt",
       "use": "@vercel/python",
       "config": {
         "maxDuration": 60,
-        "memory": 2048
+        "memory": 2048,
+        "includeFiles": "api/**"
       }
     },
     {
-      "src": "frontend/index.html",
+      "src": "frontend",
       "use": "@vercel/static"
     }
   ],
@@ -20,11 +21,8 @@
       "dest": "api/app.py"
     },
     {
-      "handle": "filesystem"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/frontend/index.html"
+      "dest": "/index.html"
     }
   ]
 }
