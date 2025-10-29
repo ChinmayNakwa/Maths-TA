@@ -6,9 +6,8 @@
       "use": "@vercel/python"
     },
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "frontend/dist" }
+      "src": "frontend/index.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -18,7 +17,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/$1"
+      "dest": "frontend/index.html"
     }
   ]
 }
