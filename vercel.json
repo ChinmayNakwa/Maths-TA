@@ -2,17 +2,13 @@
   "version": 2,
   "builds": [
     {
-      "src": "requirements.txt",
-      "use": "@vercel/python",
-      "config": {
-        "maxDuration": 60,
-        "memory": 2048,
-        "includeFiles": "api/**"
-      }
+      "src": "api/**/*.py",
+      "use": "@vercel/python"
     },
     {
-      "src": "frontend",
-      "use": "@vercel/static"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "frontend/dist" }
     }
   ],
   "routes": [
@@ -22,7 +18,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "frontend/$1"
     }
   ]
 }
