@@ -37,12 +37,12 @@ app.add_middleware(
 
 
 # --- API Endpoints ---
-@app.get("/")
+@app.get("/api/")
 def read_root():
     return {"message": "Welcome to the Maths TA API"}
 
 
-@app.post("/ask", response_model=AskResponse)
+@app.post("/api/ask", response_model=AskResponse)
 async def ask_question(request: AskRequest):
     """
     Receives a question with a session_id, invokes the LangGraph agent,
@@ -85,7 +85,7 @@ async def ask_question(request: AskRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"An internal error occurred: {str(e)}")
     
-@app.post("/transcribe")
+@app.post("/api/transcribe")
 async def handle_transcribe(audio_file: UploadFile = File(...)):
     """
     Receives an audio file, transcribes it, and returns the text.
@@ -97,7 +97,7 @@ async def handle_transcribe(audio_file: UploadFile = File(...)):
     transcribed_text = transcribe_audio(audio_bytes)
     return {"transcription": transcribed_text}
 
-@app.post("/speak")
+@app.post("/api/speak")
 async def handle_speak(text: str = Form(...)):
     """
     Receives text, converts it to speech, and streams back the audio.
