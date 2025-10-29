@@ -1,12 +1,18 @@
 {
   "version": 2,
+  "functions": {
+    "api/app.py": {
+      "maxDuration": 60,
+      "memory": 2048
+    }
+  },
   "builds": [
     {
       "src": "api/app.py",
       "use": "@vercel/python"
     },
     {
-      "src": "frontend/**",
+      "src": "frontend",
       "use": "@vercel/static"
     }
   ],
@@ -20,14 +26,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/index.html"
+      "dest": "/index.html"
     }
-  ],
-  "env": {
-    "PIP_REQUIREMENTS_FILE": "requirements.txt",
-    "HF_TOKEN": "@hf_token",
-    "ASTRA_DB_APPLICATION_TOKEN": "@astra_db_token",
-    "ASTRA_DB_API_ENDPOINT": "@astra_db_endpoint",
-    "ASTRA_DB_KEYSPACE": "@astra_db_keyspace"
-  }
+  ]
 }
