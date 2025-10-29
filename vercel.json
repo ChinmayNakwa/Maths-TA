@@ -1,15 +1,13 @@
 {
   "version": 2,
-  "functions": {
-    "api/app.py": {
-      "maxDuration": 60,
-      "memory": 2048
-    }
-  },
   "builds": [
     {
       "src": "api/app.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxDuration": 60,
+        "memory": 2048
+      }
     },
     {
       "src": "frontend",
