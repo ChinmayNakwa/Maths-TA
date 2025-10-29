@@ -1,18 +1,31 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/app"
+      "src": "api/app.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/api/ask",
+      "dest": "api/app.py"
+    },
+    {
+      "src": "/api/transcribe",
+      "dest": "api/app.py"
+    },
+    {
+      "src": "/api/speak",
+      "dest": "api/app.py"
+    },
+    {
       "src": "/",
-      "dest": "/frontend/index.html"
+      "dest": "frontend/index.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/$1"
+      "dest": "frontend/$1"
     }
   ]
 }
