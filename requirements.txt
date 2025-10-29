@@ -2,6 +2,8 @@
 langchain
 langgraph
 langchain_community
+langchain-huggingface
+
 # langsmith
 langchain-google-genai
 google-genai
