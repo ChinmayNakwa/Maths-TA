@@ -22,6 +22,7 @@ langchain-astradb # LangChain integration for AstraDB
 
 # YouTube Processing
 youtube-transcript-api
+python-multipart
 # pytube
 # opencv-python
 
