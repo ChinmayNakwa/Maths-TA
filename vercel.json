@@ -2,8 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/**/*.py",
+      "src": "api/app.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -12,17 +16,18 @@
       "dest": "api/app.py"
     },
     {
-      "src": "/",
-      "dest": "frontend/index.html"
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/$1"
+      "dest": "/frontend/index.html"
     }
   ],
-  "functions": {
-    "api/app.py": {
-      "runtime": "python3.9"
-    }
+  "env": {
+    "PIP_REQUIREMENTS_FILE": "requirements.txt",
+    "HF_TOKEN": "@hf_token",
+    "ASTRA_DB_APPLICATION_TOKEN": "@astra_db_token",
+    "ASTRA_DB_API_ENDPOINT": "@astra_db_endpoint",
+    "ASTRA_DB_KEYSPACE": "@astra_db_keyspace"
   }
 }
