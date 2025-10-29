@@ -23,6 +23,7 @@ origins = [
     "http://localhost:8000", 
     "http://127.0.0.1:3000", # <-- ADD THIS for your HTML/JS frontend
     "http://localhost:3000",  
+    "*"
     # Add your deployed frontend URL here
     # e.g., "https://maths-ta-frontend.onrender.com" 
 ]
@@ -30,7 +31,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 

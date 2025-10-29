@@ -1,31 +1,18 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/app.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "frontend/**",
-      "use": "@vercel/static"
+      "source": "/api/:path*",
+      "destination": "/api/app"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "api/app.py"
-    },
-    {
-      "handle": "filesystem"
+      "src": "/",
+      "dest": "/frontend/index.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/index.html"
+      "dest": "/frontend/$1"
     }
-  ],
-  "build": {
-    "env": {
-      "PIP_REQUIREMENTS_FILE": "requirements.txt"
-    }
-  }
+  ]
 }
