@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str = Field(..., env="CLOUDINARY_API_KEY")
     CLOUDINARY_API_SECRET: str = Field(..., env="CLOUDINARY_API_SECRET")
 
-    EMBEDDING_MODEL: str = Field("all-MiniLM-L12-v2")
+    EMBEDDING_MODEL: str = Field("sentence-transformers/all-MiniLM-L12-v2")
     EMBEDDING_DIMENSION: int = 384
 
     CHUNK_SIZE: int = 1000         
