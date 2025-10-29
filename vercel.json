@@ -2,21 +2,13 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/app.py",
+      "src": "api/**/*.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/ask",
-      "dest": "api/app.py"
-    },
-    {
-      "src": "/api/transcribe",
-      "dest": "api/app.py"
-    },
-    {
-      "src": "/api/speak",
+      "src": "/api/(.*)",
       "dest": "api/app.py"
     },
     {
@@ -27,5 +19,10 @@
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
-  ]
+  ],
+  "functions": {
+    "api/app.py": {
+      "runtime": "python3.9"
+    }
+  }
 }
