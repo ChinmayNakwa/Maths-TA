@@ -60,7 +60,7 @@ conda install -c conda-forge poppler ffmpeg opencv
 
 # Install Python packages using pip
 pip install -r requirements.txt
-
+```
 
 ## 🧩 Feature Roadmap / To-Do List
 
