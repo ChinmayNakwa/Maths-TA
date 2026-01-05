@@ -19,13 +19,11 @@ app = FastAPI(
 
 # --- CORS Middleware ---
 origins = [
-    "http://localhost:8501",  # Default for local Streamlit
+    "http://localhost:8501",
     "http://localhost:8000", 
-    "http://127.0.0.1:3000", # <-- ADD THIS for your HTML/JS frontend
+    "http://127.0.0.1:3000",
     "http://localhost:3000",  
     "*"
-    # Add your deployed frontend URL here
-    # e.g., "https://maths-ta-frontend.onrender.com" 
 ]
 app.add_middleware(
     CORSMiddleware,
