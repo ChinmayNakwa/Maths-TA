@@ -79,9 +79,9 @@ Follow these steps to set up and run Cerebrix on your local machine.
 ### 2. Clone the Repository
 
 ```bash
-git checkout main
 git clone https://github.com/ChinmayNakwa/Cerebrix.git
 cd Cerebrix
+git checkout main
 ```
 
 ### 3. Environment Setup
@@ -187,4 +187,8 @@ This project is designed as an educational tool to enhance learning from publicl
 
 If you are a content owner and have concerns about this project's use of your materials, please contact `29chinmaynakwa@gmail.com` and we will respond promptly.
 
-**For other users replicating this project**: Please ensure you have appropriate permissions for any copyrighted materials you process. Fair use determinations are made on a case-by-case basis.
+**For other users replicating this project**: Please ensure you have appropriate permissions for any copyrighted materials you process. Fair use determinations are made on a case-by-case basis# Cerebrix 🧠🤖
+
+Your AI teaching assistant for YouTube courses, combining video lectures, textbooks, and Socratic tutoring in one conversational interface.
+
+---
