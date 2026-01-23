@@ -85,7 +85,7 @@ export default function ChatPage() {
                 }));
                 setMessages(formattedMessages);
             } else {
-                setMessages([{ role: 'ta', content: "Hello! I'm **Cerebrix**, your AI tutor for CS109. How can I help you today?" }]);
+                setMessages([{ role: 'ta', content: "Hello! I'm **Cerebrix**, your AI tutor for Probability. How can I help you today?" }]);
             }
         } catch (error) {
             console.error(error);

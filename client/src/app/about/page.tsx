@@ -6,6 +6,7 @@ export default function AboutPage() {
         { name: "LangGraph", desc: "Stateful Agent Architecture" },
         { name: "Google Gemini 2.5", desc: "Reasoning & Vision Model" },
         { name: "AstraDB", desc: "Vector Database" },
+        { name: "PostgreSQL", desc: "Database" },
         { name: "FastAPI", desc: "Backend Server" },
         { name: "Next.js 16", desc: "Frontend Framework" },
         { name: "Cloudinary", desc: "Image & Media Hosting" },
@@ -23,7 +24,7 @@ export default function AboutPage() {
           <p>
             While studying Stanford's CS109 on YouTube, I encountered a common frustration: 
             there was no way to discuss problems or get guidance when attempting exercises. 
-            <strong>Cerebrix</strong> emerged from that need.
+            <strong> Cerebrix</strong> emerged from that need.
           </p>
           <p>
             It is a course-agnostic architecture that transforms one-way video lectures into 
