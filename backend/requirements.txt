@@ -4,7 +4,6 @@ langgraph
 langsmith
 langchain-google-genai
 google-genai
-
 # API Framework
 fastapi
 uvicorn[standard] # For running the FastAPI server
@@ -16,6 +15,7 @@ sentence-transformers
 astrapy           # Direct driver for AstraDB
 langchain-astradb # LangChain integration for AstraDB
 Pillow            # For image processing
+SQLAlchemy
 
 # YouTube Processing
 youtube-transcript-api

@@ -1,0 +1,56 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-background: #050505; /* Deeper black */
+  --color-surface: #0a0a0a;
+  --color-surface-highlight: #171717;
+  --color-primary: #ffffff;
+  --color-secondary: #a1a1aa;
+  
+  /* Electric Violet/Blue Gradient Theme */
+  --color-accent: #6366f1;     /* Indigo 500 */
+  --color-accent-glow: rgba(99, 102, 241, 0.15);
+  --color-accent-gradient-start: #4f46e5;
+  --color-accent-gradient-end: #8b5cf6;
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  background-image: 
+    radial-gradient(circle at 50% 0%, var(--color-accent-glow) 0%, transparent 60%),
+    linear-gradient(to bottom, transparent, var(--color-background));
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Custom Scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* MathJax Overrides */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}

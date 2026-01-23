@@ -186,12 +186,12 @@ class TutorAgent:
         self.rag_manager = RAGManager()
         # Use updated models with appropriate temperatures
         self.vision_model = ChatGoogleGenerativeAI(
-            model="gemini-2.5-flash", 
+            model="gemini-2.5-flash-lite", 
             temperature=0, 
             api_key=settings.GOOGLE_API_KEY
         )
         self.reasoning_model = ChatGoogleGenerativeAI(
-            model="gemini-2.5-flash", 
+            model="gemini-2.5-flash-lite", 
             temperature=1, 
             api_key=settings.GOOGLE_API_KEY
         )
