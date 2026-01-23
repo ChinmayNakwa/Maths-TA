@@ -8,6 +8,7 @@ from typing import List, Dict, Any, TypedDict, Optional, Annotated
 from langgraph.graph.message import add_messages
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
+from backend.database.postgres import checkpointer
 from pydantic import BaseModel, Field
 import operator
 import json
@@ -17,7 +18,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 from backend.database.astra_db_connection import get_vector_store
 from backend.core.schemas import SourceDocument
 from backend.config import settings
-from langchain.docstore.document import Document
+from langchain_classic.docstore.document import Document
 from backend.core.rag.rag_manager import RAGManager
 
 # LangSmith Configuration
@@ -761,6 +762,6 @@ workflow.add_edge("finalize_history", END)
 memory = MemorySaver()
 
 # Compile the graph
-app_graph = workflow.compile(checkpointer=memory)
+app_graph = workflow.compile(checkpointer=checkpointer)
 # app_graph = workflow.compile()
 print("Combined LangGraph agent compiled successfully with memory, Astra DB compatible filtering, intelligent routing, and robust error handling.")

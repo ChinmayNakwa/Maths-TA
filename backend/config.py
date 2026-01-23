@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     IMAGE_OUTPUT_DIR: str = "output_images"
 
     HF_TOKEN: str = Field(..., env="HF_TOKEN")
+
+    POSTGRES_DB_URL: str = Field(..., env="POSTGRES_DB_URL")
     
 
     class Config:
