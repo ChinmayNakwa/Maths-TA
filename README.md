@@ -127,25 +127,7 @@ HF_TOKEN=
 ```bash
 # Start the FastAPI backend
 uvicorn app.main:app --reload
-```
 
----
-
-## 🧩 Feature Roadmap
-
-*   ✅ **Completed**
-    *   [x] Multi-modal RAG pipeline with PDF and video support
-    *   [x] Socratic tutoring with text-based problem analysis
-    *   [x] Conversational memory and context tracking
-    *   [x] FastAPI backend with LangGraph agent
-*   🚧 **In Progress**
-    *   [ ] Enhanced frontend UI/UX with modern design
-    *   [ ] Vision analysis for handwritten solution evaluation
-*   🔮 **Planned**
-    *   [ ] Practice problem generation
-    *   [ ] Spaced repetition flashcard integration
-
----
 
 ## 🤝 Contributing
 
