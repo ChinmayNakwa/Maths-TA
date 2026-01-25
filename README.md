@@ -1,14 +1,41 @@
-# Cerebrix AI Tutor 🧠🤖
+# Cerebrix 🧠🤖
 
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
 [![Framework](https://img.shields.io/badge/Framework-LangGraph-blueviolet)](https://langchain.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An advanced, multi-modal AI-powered teaching assistant for the Probability. This agent provides a conversational interface to answer questions, explain concepts from the course textbook and video lectures, and offer Socratic-style guidance on user-submitted problems.
+Your AI teaching assistant for YouTube courses, combining video lectures, textbooks, and Socratic tutoring in one conversational interface.
 
 <img width="1899" height="1045" alt="image" src="https://github.com/user-attachments/assets/ac805f4c-96a6-4dd9-a65d-b9bd51584bfb" />
 
 <img width="1914" height="1041" alt="image" src="https://github.com/user-attachments/assets/949e91ce-d789-4ed4-b4f7-db40bb0aaf78" />
+
+
+---
+
+## 📖 Description
+
+Cerebrix transforms passive video learning into an interactive educational experience. This AI-powered teaching assistant can answer questions, explain concepts, and provide Socratic guidance for any YouTube course with accompanying materials.
+
+The current deployment focuses on Stanford's CS109 (Probability for Computer Scientists), but the architecture is course-agnostic and can be adapted to any subject.
+
+**Why Cerebrix?**
+
+*   **Fills the Learning Gap:** Transforms one-way video lectures into interactive conversations.
+*   **Learn By Doing:** Receive guided hints on problems rather than direct answers.
+*   **Course-Agnostic:** Adaptable architecture supports any YouTube course.
+*   **Always Available:** 24/7 access to course-specific tutoring without waiting for office hours.
+*   **Multi-Modal Understanding:** Processes both text and images for comprehensive support.
+
+---
+
+## 💡 Motivation
+
+While studying Stanford's CS109 on YouTube, I encountered a common frustration: there was no way to discuss problems or get guidance when attempting exercises. As someone passionate about understanding the mathematics behind AI, I wanted a TA or study companion to support this journey, so I built one.
+
+This project emerged from that need, creating an intelligent assistant that any self-directed learner can use to enhance their online education experience.
+
+---
 
 
 ## Features
@@ -22,10 +49,11 @@ An advanced, multi-modal AI-powered teaching assistant for the Probability. This
 ## Project Architecture
 
 -   **Backend:** A `FastAPI` server running a `LangGraph` agent.
--   **Frontend:** A static `HTML/CSS/JS` chat interface.
+-   **Frontend:** A static `Nextjs` chat interface.
 -   **Vector Database:** `AstraDB` for storing and retrieving text and metadata embeddings.
+-   **Database:** `PostgreSQL` for storing chat history.
 -   **Image Hosting:** `Cloudinary` for storing page images and video keyframes.
--   **LLMs:** Google `Gemini 2.5 Flash` for reasoning, vision, and generation.
+-   **LLMs:** Google `Gemini` for reasoning, vision, and generation.
 -   **Data Ingestion:** Custom Python scripts using `PyMuPDF`, `OpenCV`, and `yt-dlp` to process the knowledge sources.
 
 ---
@@ -51,15 +79,16 @@ This project uses `conda` to manage its complex dependencies.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/Maths-TA.git
-cd Maths-TA
+git clone https://github.com/ChinmayNakwa/Cerebrix.git
+cd Cerebrix
 
 # Create and activate the conda environment
-conda create --name maths-ta python=3.12
-conda activate maths-ta
+conda create --name cerebrix python=3.12
+conda activate cerebrix
 
 # Install system-level dependencies using conda
-conda install -c conda-forge --file conda-reqs.txt # You would create this file
+conda install -c conda-forge --file conda-reqs.txt  
+
 # Or install them one by one:
 conda install -c conda-forge poppler ffmpeg opencv
 
