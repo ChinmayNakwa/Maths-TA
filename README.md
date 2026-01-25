@@ -1,10 +1,15 @@
-# Maths AI Tutor 🧠🤖
+# Cerebrix AI Tutor 🧠🤖
 
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
 [![Framework](https://img.shields.io/badge/Framework-LangGraph-blueviolet)](https://langchain.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An advanced, multi-modal AI-powered teaching assistant for the Probability. This agent provides a conversational interface to answer questions, explain concepts from the course textbook and video lectures, and offer Socratic-style guidance on user-submitted problems.
+
+<img width="1899" height="1045" alt="image" src="https://github.com/user-attachments/assets/ac805f4c-96a6-4dd9-a65d-b9bd51584bfb" />
+
+<img width="1914" height="1041" alt="image" src="https://github.com/user-attachments/assets/949e91ce-d789-4ed4-b4f7-db40bb0aaf78" />
+
 
 ## Features
 
