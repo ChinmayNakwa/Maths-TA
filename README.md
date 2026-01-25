@@ -94,3 +94,51 @@ conda install -c conda-forge poppler ffmpeg opencv
 
 # Install Python packages using pip
 pip install -r requirements.txt
+
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 🙏 Acknowledgments
+
+*   Stanford CS109 course materials
+*   LangChain and LangGraph teams
+*   Google Gemini AI
+*   The open-source community
+
+---
+
+## 📧 Contact
+
+For questions or feedback, please open an issue on GitHub or reach out to `29chinmaynakwa@gmail.com`.
+
+---
+
+> **⚠️ Important Note:** When replicating this project for other courses, be mindful of copyright and fair use policies for course materials. Ensure you have appropriate permissions to process and use the content.
+
+## ⚖️ Copyright & Fair Use Notice
+
+This project is designed as an educational tool to enhance learning from publicly available course materials. We believe this constitutes fair use under copyright law for the following reasons:
+
+-   **Educational Purpose**: Non-commercial teaching aid for self-directed learners
+-   **Transformative Use**: Creates an interactive tutoring interface not present in original materials
+-   **Attribution**: All content is attributed to original creators with links to source materials
+-   **No Market Harm**: Designed to complement, not replace, the original course experience
+
+**All course content remains the property of its original creators.** This project:
+
+-   Does not claim ownership of any course materials
+-   Is not monetized in any way
+-   Can be removed upon request from content owners
+
+If you are a content owner and have concerns about this project's use of your materials, please contact `29chinmaynakwa@gmail.com` and we will respond promptly.
+
+**For other users replicating this project**: Please ensure you have appropriate permissions for any copyrighted materials you process. Fair use determinations are made on a case-by-case basis# Cerebrix 🧠🤖
+
+Your AI teaching assistant for YouTube courses, combining video lectures, textbooks, and Socratic tutoring in one conversational interface.
+
+---
