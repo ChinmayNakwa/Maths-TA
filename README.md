@@ -127,6 +127,7 @@ HF_TOKEN=
 ```bash
 # Start the FastAPI backend
 uvicorn app.main:app --reload
+```
 
 
 ## 🤝 Contributing
