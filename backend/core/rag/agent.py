@@ -748,7 +748,7 @@ workflow.add_conditional_edges(
     {
         "simple_rag": "simple_rag",
         "generate_socratic_response": "generate_socratic_response",
-        # FIX: The key returned by the function is "finalize", so we map it here.
+        # The key returned by the function is "finalize", so we map it here.
         "finalize": "finalize_history",
         # We also keep the END mapping in case the edge function returns it as a fallback.
         END: END
