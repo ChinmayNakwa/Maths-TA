@@ -86,9 +86,6 @@ cd Cerebrix
 conda create --name cerebrix python=3.12
 conda activate cerebrix
 
-# Install system-level dependencies using conda
-conda install -c conda-forge --file conda-reqs.txt  
-
 # Or install them one by one:
 conda install -c conda-forge poppler ffmpeg opencv
 
